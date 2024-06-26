@@ -21,5 +21,5 @@ docker compose down
 In order to create a new `order` use the following curl command.
 
 ```bash
-curl -H "content-type:application/json" -d '{ "lineItems": [ { "quantity":2, "product":42}]}' -XPOST http://localhost:8080/service
+curl -H "content-type:application/json" -d '{ "lineItems": [ { "quantity":2, "product":42}]}' -XPOST http://localhost:8080/orders
 ```

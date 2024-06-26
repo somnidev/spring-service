@@ -4,10 +4,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 
 public class Orders {
@@ -22,7 +24,12 @@ class OrdersController {
         this.repository = repository;
     }
 
-    @PostMapping("/service")
+    @GetMapping("/orders")
+    public List<Order> getOrders() {
+        return repository.findAll();
+    }
+
+    @PostMapping("/orders")
     void createOrder(@RequestBody Order order) {
         var saved = this.repository.save(order);
         System.out.println("Order created: " + saved);
