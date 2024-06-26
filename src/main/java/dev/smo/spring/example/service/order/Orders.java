@@ -1,5 +1,7 @@
 package dev.smo.spring.example.service.order;
 
+import dev.smo.spring.example.service.inventory.InventoryUpdatedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.repository.ListCrudRepository;
@@ -20,8 +22,11 @@ class OrdersController {
 
     private final OrderRepository repository;
 
-    public OrdersController(OrderRepository repository) {
+    private final ApplicationEventPublisher publisher;
+
+    public OrdersController(OrderRepository repository, ApplicationEventPublisher publisher) {
         this.repository = repository;
+        this.publisher = publisher;
     }
 
     @GetMapping("/orders")
@@ -33,6 +38,7 @@ class OrdersController {
     void createOrder(@RequestBody Order order) {
         var saved = this.repository.save(order);
         System.out.println("Order created: " + saved);
+        saved.lineItems().forEach(li -> publisher.publishEvent(new InventoryUpdatedEvent(li.product(), li.quantity())));
     }
 }
 
